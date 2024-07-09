@@ -6,12 +6,12 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model UserSecret {
-  id            String          @id @default(cuid())
+  id            String          @id @default(cuid()) @map("_id")
   userId         String          @unique
   secretkey     String          @default(cuid())
   createdAt DateTime @default(now())
