@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Mail Service
+### Overview
+Mail Service is a convenient API-based solution for developers to send emails with ease. With a simple API call, you can send emails without worrying about the underlying complexities of email infrastructure.
 
-## Getting Started
+### How it Works
+Make an API call to our Mail Service endpoint with the required email details (e.g., recipient, subject, body, etc.).
+Our service takes care of sending the email on your behalf.
+### Preview
+![Mail Service](assets/mail-service.PNG)
 
-First, run the development server:
+![Mail Service](assets/mail-service-dashboard.PNG)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Getting Started
+To start using Mail Service, follow these steps:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Sign up for an API key on our website.
+- Integrate our API into your application using your preferred programming language.
+- Start sending emails with a simple API call!
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### API Documentation
+Coming soon! Our API documentation will be available shortly, providing detailed information on API endpoints, request/response formats, and more.
 
-## Learn More
+### Support
+If you have any questions or need assistance, please don't hesitate to reach out to us at info@royoltech.com.
 
-To learn more about Next.js, take a look at the following resources:
+### License
+Mail Service is licensed under MIT License.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Contributing
+We welcome contributions to Mail Service! If you'd like to contribute, please fork our repository and submit a pull request.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

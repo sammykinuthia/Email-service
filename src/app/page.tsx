@@ -1,5 +1,12 @@
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+
+export const metadata:Metadata = {
+  title: "Mail Service",
+  description: "Sending your emails is now easy!!! ",
+}
+
 
 export default function Home() {
   return (
@@ -9,14 +16,15 @@ export default function Home() {
         <div className="grid grid-cols-3">
           <div className="col-span-2 flex flex-col pt-28">
             <h1 className="text-5xl text-slate-700 font-bold uppercase">
-              Instant signup emails
+              Developer-Friendly Email API
             </h1>
             <p className="mt-8 text-slate-800 text-xl">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias,
-              magni! Totam ipsum dicta fugiat culpa soluta. Officia cumque eum
-              atque deleniti dolores eveniet exercitationem aut voluptates nemo
-              fuga quia animi, illum ullam libero, labore repudiandae quis ipsum
-              ipsa sunt similique.
+              Simplify your email-sending process with our seamless API
+              solution. Send emails effortlessly without managing servers or
+              worrying about delivery issues. Focus on building your
+              applications while we handle the complexities. Easy integration,
+              robust performance, and comprehensive documentation make our API
+              the perfect email solution for developers.
             </p>
           </div>
           <div className="col-span-1 my-8 p-4 flex flex-col items-center justify-center gap-8">
@@ -57,10 +65,10 @@ export default function Home() {
             How It Works
           </h2>
           <div className="grid grid-cols-4 gap-8  my-8">
-            <Card text="Signin 🔑"/>
-            <Card text="Copy your API Key 🔐"/>
-            <Card text="Call Our Endpoint 📶"/>
-            <Card text="We Deliver you the email! 😊"/>
+            <Card text="Signin 🔑" />
+            <Card text="Copy your API Key 🔐" />
+            <Card text="Call Our Endpoint 📶" />
+            <Card text="We Deliver you the email! 😊" />
           </div>
         </div>
       </div>
@@ -68,9 +76,12 @@ export default function Home() {
   );
 }
 
-function Card({text}:{text:string}) {
+function Card({ text }: { text: string }) {
   return (
-    <div  style={{ boxShadow: "12px 12px black" }} className="p-4 py-12 bg-[#D9D9D9] w-full h-full flex justify-center items-center rounded-xl">
+    <div
+      style={{ boxShadow: "12px 12px black" }}
+      className="p-4 py-12 bg-[#D9D9D9] w-full h-full flex justify-center items-center rounded-xl"
+    >
       <h4 className="font-bold text-2xl">{text}</h4>
     </div>
   );

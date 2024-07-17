@@ -5,6 +5,19 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 
 import prisma from "../../../prisma/db";
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
+
+
+export const metadata:Metadata = {
+  title: "Mail Service | Dashboard",
+  description: "Sending your emails is now easy!!! ",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
+
 const DashboardPage = async () => {
   const user = await currentUser();
   if (!user) return redirect("/");
