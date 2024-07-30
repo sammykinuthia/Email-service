@@ -11,14 +11,14 @@ export const metadata:Metadata = {
 export default function Home() {
   return (
     <main>
-      <div className="container mx-auto max-w-7xl w-full">
+      <div className="container mx-auto max-w-7xl w-full px-2 sm:px-4 md:px-8">
         {/* hero section */}
-        <div className="grid grid-cols-3">
-          <div className="col-span-2 flex flex-col pt-28">
-            <h1 className="text-5xl text-slate-700 font-bold uppercase">
+        <div className="grid grid-cols-1 md:grid-cols-3">
+          <div className="md:col-span-2 flex flex-col pt-8 lg:pt-28">
+            <h1 className="text-2xl lg:text-5xl text-slate-900 font-bold uppercase">
               Developer-Friendly Email API
             </h1>
-            <p className="mt-8 text-slate-800 text-xl">
+            <p className="mt-8 text-slate-800 lg:text-xl">
               Simplify your email-sending process with our seamless API
               solution. Send emails effortlessly without managing servers or
               worrying about delivery issues. Focus on building your
@@ -61,10 +61,10 @@ export default function Home() {
 
         {/* How it works */}
         <div className="my-8">
-          <h2 className="text-3xl uppercase text-slate-800 font-bold">
+          <h2 className="text-xl lg:text-3xl text-center md:text-start uppercase text-slate-800 font-bold">
             How It Works
           </h2>
-          <div className="grid grid-cols-4 gap-8  my-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8  my-8 ">
             <Card text="Signin 🔑" />
             <Card text="Copy your API Key 🔐" />
             <Card text="Call Our Endpoint 📶" />
@@ -82,7 +82,7 @@ function Card({ text }: { text: string }) {
       style={{ boxShadow: "12px 12px black" }}
       className="p-4 py-12 bg-[#D9D9D9] w-full h-full flex justify-center items-center rounded-xl"
     >
-      <h4 className="font-bold text-2xl">{text}</h4>
+      <h4 className="font-bold lg:text-2xl">{text}</h4>
     </div>
   );
 }
