@@ -19,7 +19,6 @@ const NavBar = () => {
               <SignInButton />
             </span>
           </SignedOut>
-          <SignInButton />
           <SignedIn>
             <span className="p-1 flex items-center justify-center  bg-black text-white rounded-full">
               <UserButton />
