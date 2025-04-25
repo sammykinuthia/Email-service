@@ -1,11 +1,11 @@
 import Link from "next/link";
 import React from "react";
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignInButton, SignedIn, SignedOut, UserButton, GoogleOneTap } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 
 const NavBar = () => {
   const { userId } = auth();
-
+  console.log("userID - " + userId)
   return (
     <nav className="border-b-4 border-black">
       <div className="container max-w-7xl w-full mx-auto p-4 flex justify-between items-center">
@@ -19,6 +19,7 @@ const NavBar = () => {
               <SignInButton />
             </span>
           </SignedOut>
+          <SignInButton />
           <SignedIn>
             <span className="p-1 flex items-center justify-center  bg-black text-white rounded-full">
               <UserButton />

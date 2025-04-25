@@ -17,5 +17,20 @@ model UserSecret {
   secretkey     String          @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  emailLog EmailLog[]
 }
+
+model EmailLog {
+  id            String     @id @default(cuid()) @map("_id")
+  userSecretId  String     @map("user_secret_id")
+  to            String
+  subject       String
+  body          String
+  payload       Json       // <--- stores dynamic content
+  createdAt     DateTime   @default(now())
+
+  userSecret    UserSecret @relation(fields: [userSecretId], references: [id])
+}
+
 
