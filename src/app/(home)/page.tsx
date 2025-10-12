@@ -127,7 +127,7 @@ export default function Home() {
           <div className="text-center">
             <h2 className="text-4xl lg:text-5xl font-bold uppercase tracking-wider mb-4">About Us</h2>
             <p className="text-lg text-blue-200 max-w-4xl mx-auto">
-              We are a team of passionate developers who were tired of the complexities involved in email delivery. We believe that sending emails should be simple, reliable, and accessible to everyone. That's why we created Mail Service, an API-first platform designed to take the hassle out of email so you can focus on what matters most: building amazing applications.
+              We are a team of passionate developers who were tired of the complexities involved in email delivery. We believe that sending emails should be simple, reliable, and accessible to everyone. That&apos;s why we created Mail Service, an API-first platform designed to take the hassle out of email so you can focus on what matters most: building amazing applications.
             </p>
           </div>
         </section>

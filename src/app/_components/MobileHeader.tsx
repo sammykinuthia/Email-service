@@ -4,6 +4,7 @@
 
 import { UserButton } from "@clerk/nextjs";
 import { Menu } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 interface MobileHeaderProps {
@@ -14,7 +15,7 @@ export default function MobileHeader({ toggleSidebar }: MobileHeaderProps) {
   return (
     <header className="md:hidden sticky top-0 z-30 flex h-16 items-center justify-between border-b border-white/20 bg-blue-950/50 px-4 backdrop-blur-lg sm:px-6">
       <Link href="/" className="text-xl font-bold text-white">
-        <img src="/logo.svg" alt="Mail Service Logo" className="h-10 w-auto" />
+        <Image width={100} height={40} src="/logo.svg" alt="Mail Service Logo" className="h-10 w-auto" />
       </Link>
       <div className="flex items-center gap-4">
         <UserButton afterSignOutUrl="/" />
