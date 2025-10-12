@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const user = await prisma.userSecret.findFirst({
+    const user = await prisma.project.findFirst({
       where: { secretkey: key },
     });
 
@@ -50,32 +50,42 @@ export async function POST(request: NextRequest) {
         headers: corsHeaders,
       });
     }
-
+   
     const html = await render(SignupEmail(data));
+    const text = await render(SignupEmail(data), { plainText: true });
 
     const info = await transporter.sendMail({
       from: `"Royoltech Solutions" <${process.env.ZOHO_EMAIL}>`,
       to: [to],
       subject: data.subject,
       html,
+      text
     });
-
-    await prisma.emailLog.create({
+    const mail = await prisma.emailLog.create({
       data: {
         userSecretId: user.id,
         to: to,
         subject: data.subject,
         body: data.intro,
         payload: data,
+        status: "SENT",
+        messageId: info.messageId,
       },
     });
-
+   
     return new NextResponse(JSON.stringify({ success: true, messageId: info.messageId }), {
       status: 200,
       headers: corsHeaders,
     });
   } catch (error: any) {
     console.error("Email sending error:", error);
+    // Log the failed email attempt if possible
+    if (error?.mail) {
+      await prisma.emailLog.update({
+        where: { id: error.mail.id },
+        data: { status: "FAILED"},
+      });
+    }
     return new NextResponse(JSON.stringify({ error: "Something went wrong", details: error.message }), {
       status: 500,
       headers: corsHeaders,

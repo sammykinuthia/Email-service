@@ -10,27 +10,47 @@ datasource db {
   url      = env("MONGO_URL")
   // url      = env("DATABASE_URL")
 }
+// prisma/schema.prisma
 
-model UserSecret {
-  id            String          @id @default(cuid()) @map("_id")
-  userId         String          @unique
-  secretkey     String          @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Project {
+  id        String     @id @default(cuid()) @map("_id")
+  userId    String
+  name      String
+  secretkey String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  emailLogs EmailLog[]
 
-  emailLog EmailLog[]
+  @@index([userId])
 }
 
 model EmailLog {
-  id            String     @id @default(cuid()) @map("_id")
-  userSecretId  String     @map("user_secret_id")
-  to            String
-  subject       String
-  body          String
-  payload       Json       // <--- stores dynamic content
-  createdAt     DateTime   @default(now())
+  id           String   @id @default(cuid()) @map("_id")
+  to           String
+  subject      String
+  messageId    String?
+  body         String
+  status       EmailStatus @default(PENDING)
+  payload      Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  project      Project  @relation(fields: [userSecretId], references: [id], onDelete: Cascade)
+  userSecretId String
 
-  userSecret    UserSecret @relation(fields: [userSecretId], references: [id])
+  @@index([userSecretId])
+} 
+model ContactMessage {
+  id        String   @id @default(cuid()) @map("_id")
+  name      String
+  email     String
+  message   String   
+  isRead    Boolean  @default(false) // Useful for a future admin panel
+  createdAt DateTime @default(now())
 }
 
-
+// Define EmailStatus enum
+enum EmailStatus {
+  SENT
+  FAILED
+  PENDING
+}

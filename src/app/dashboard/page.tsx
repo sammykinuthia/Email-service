@@ -1,66 +1,78 @@
-import React, { useRef, useState } from "react";
-import CopyToClipBoard from "../_components/CopyToClipBoard";
-import CreateSecret from "../_components/CreateSecret";
-import { auth, currentUser } from "@clerk/nextjs/server";
+// app/dashboard/page.tsx
 
 import prisma from "../../../prisma/db";
+import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { Metadata } from "next";
+import { CopyButton } from "../_components/CopyButton";
 
-
-export const metadata:Metadata = {
-  title: "Mail Service | Dashboard",
-  description: "Sending your emails is now easy!!! ",
-  robots: {
-    index: false,
-    follow: false,
-  },
+export const metadata: Metadata = {
+    title: "Mail Service | Dashboard",
+    description: "Dashboard overview and how-to guide.",
 };
 
+export default async function DashboardPage() {
+    const { userId } = auth();
+    if (!userId) redirect("/");
 
-const DashboardPage = async () => {
-  const user = await currentUser();
-  if (!user) return redirect("/");
-  const userSecret = await prisma.userSecret.findFirst({
-    where: { userId: user?.id },
-  });
-  if (!userSecret) {
-    return <CreateSecret   userId={user?.id} />;
-  }
+    const firstProject = await prisma.project.findFirst({
+        where: { userId: userId },
+    });
 
-  const sampleJson = `{
-    "name":"samuel",
-    "subject":"Welcome Onboard",
-    "intro":"welcome to the our signup list",
-    "email":"sam@gmail.com",
-    "phone":"+254 790 000 000",
-    "to":"admin@gmai.com",
-    "key":"${userSecret.secretkey}",
+    if (!firstProject) {
+        return (
+            <div className="text-center py-20 bg-white/5 rounded-2xl flex flex-col items-center">
+                <h1 className="text-2xl font-bold">Welcome to your Dashboard!</h1>
+                <p className="text-blue-200 mt-2 mb-6">Create a project to get started.</p>
+                <Link href="/dashboard/projects" className="px-5 py-2.5 bg-white text-blue-900 font-semibold rounded-full hover:bg-blue-100 transition-all duration-300">
+                    Go to Projects
+                </Link>
+            </div>
+        );
+    }
+
+    const sampleJson = `{
+    "subject": "Welcome Onboard!",
+    "intro": "Thanks for signing up. We're excited to have you.",
+    "to": "recipient@example.com",
+    "key": "${firstProject.secretkey}",
+    "...your_other_data"
 }`;
-  return (
-    <div className="container  mx-auto p-4 flex flex-col items-center ">
-      <h1 className="font-bold text-2xl my-4">How To</h1>
-      <div className="max-w-4xl w-full rounded-2xl border-8 border-black p-8 bg-[#D9D9D9]">
-        <ol className="list-decimal">
-          <li className="font-bold">
-            <h4 className="">Copy The Key</h4>
-            <CopyToClipBoard
-              text={userSecret.secretkey}
-            />
-          </li>
-          <li className="font-bold">
-            <h4 className="">Sample JSON</h4>
-            <p className="italic font-normal">Note that this is just a sample with some required fields, you can add other fields relevant to your email</p>
-            <CopyToClipBoard text={sampleJson} />
-          </li>
-          <li className="font-bold">
-            <h4 className="">Make a POST Request to this endpoint</h4>
-            <CopyToClipBoard text={"https://mail.royoltech.com/api/email"} />
-          </li>
-        </ol>
-      </div>
-    </div>
-  );
-};
 
-export default DashboardPage;
+    return (
+        <div className="space-y-8">
+            <h1 className="text-3xl font-bold tracking-tight">Overview & How To</h1>
+            <div className="p-8 bg-white/5 rounded-2xl backdrop-blur-md space-y-6">
+                <div className="space-y-2">
+                    <h2 className="text-xl font-semibold">1. Use your API Key</h2>
+                    <p className="text-blue-200">Copy the API key from one of your projects.</p>
+                     <div className="flex items-center gap-2 p-3 bg-black/30 rounded-lg">
+                        <span className="font-mono text-sm truncate">{firstProject.secretkey}</span>
+                        <CopyButton textToCopy={firstProject.secretkey} />
+                    </div>
+                </div>
+
+                <div className="space-y-2">
+                    <h2 className="text-xl font-semibold">2. Make a POST Request</h2>
+                    <p className="text-blue-200">Send a POST request to the following endpoint.</p>
+                     <div className="flex items-center gap-2 p-3 bg-black/30 rounded-lg">
+                        <span className="font-mono text-sm">https://mail.royoltech.com/api/email</span>
+                        <CopyButton textToCopy={"https://mail.royoltech.com/api/email"} />
+                    </div>
+                </div>
+
+                <div className="space-y-2">
+                    <h2 className="text-xl font-semibold">3. Sample JSON Body</h2>
+                    <p className="text-blue-200">Your request body should be a JSON object like this. Add any other fields relevant to your email template.</p>
+                    <div className="relative p-4 bg-black/30 rounded-lg">
+                        <pre className="text-sm whitespace-pre-wrap font-mono">{sampleJson}</pre>
+                        <div className="absolute top-3 right-3">
+                            <CopyButton textToCopy={sampleJson} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
