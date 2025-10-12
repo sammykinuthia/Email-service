@@ -1,1 +1,0 @@
-export {generateKey} from './dashboard'
