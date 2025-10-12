@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { FaServer, FaCode, FaShieldAlt, FaUsers } from "react-icons/fa";
 import Footer from "../_components/Footer";
 import ContactForm from "../_components/ContactForm";
+import Link from "next/link";
+import { SignInButton } from "@clerk/nextjs";
 
 export default function Home() {
   useEffect(() => {
@@ -117,9 +119,11 @@ export default function Home() {
           <p className="mt-6 text-xl md:text-2xl text-blue-200 max-w-3xl animate-fade-in-up">
             The most developer-friendly email API for building, testing, and sending emails at scale.
           </p>
-          <button className="mt-12 px-8 py-4 bg-white text-blue-900 font-bold rounded-full text-lg hover:bg-blue-100 transform hover:scale-110 transition-all duration-300 animate-fade-in-up">
-            Start Sending for Free
-          </button>
+          <Link href={'/dashboard'} className="mt-12 px-8 py-4 bg-white text-blue-900 font-bold rounded-full text-lg hover:bg-blue-100 transform hover:scale-110 transition-all duration-300 animate-fade-in-up">
+           <SignInButton  mode="modal" >
+            Get Started For Free
+           </SignInButton>
+          </Link>
         </section>
 
         {/* About Us Section */}
