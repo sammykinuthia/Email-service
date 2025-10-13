@@ -5,7 +5,7 @@ import { FaServer, FaCode, FaShieldAlt, FaUsers } from "react-icons/fa";
 import Footer from "../_components/Footer";
 import ContactForm from "../_components/ContactForm";
 import Link from "next/link";
-import { SignInButton } from "@clerk/nextjs";
+import { ClerkLoaded, ClerkLoading, SignInButton } from "@clerk/nextjs";
 
 export default function Home() {
   useEffect(() => {
@@ -120,9 +120,15 @@ export default function Home() {
             The most developer-friendly email API for building, testing, and sending emails at scale.
           </p>
           <Link href={'/dashboard'} className="mt-12 px-8 py-4 bg-white text-blue-900 font-bold rounded-full text-lg hover:bg-blue-100 transform hover:scale-110 transition-all duration-300 animate-fade-in-up">
-           <SignInButton  mode="modal" >
-            Get Started For Free
-           </SignInButton>
+            <ClerkLoading>
+              {/* Skeleton loader that matches the button's size */}
+              <div className="h-[44px] w-[105px] rounded-full bg-white/10 animate-pulse"></div>
+            </ClerkLoading>
+            <ClerkLoaded>
+              <SignInButton mode="modal" >
+                Get Started For Free
+              </SignInButton>
+            </ClerkLoaded>
           </Link>
         </section>
 
@@ -180,7 +186,7 @@ export default function Home() {
         {/* Contact Us Section */}
         <section id="contact-us" className="py-20 my-16">
           <h2 className="text-4xl lg:text-5xl text-center font-bold uppercase mb-12 tracking-wider">Contact Us</h2>
-          <ContactForm/>
+          <ContactForm />
         </section>
 
       </main>
