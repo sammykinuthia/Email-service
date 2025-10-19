@@ -6,11 +6,17 @@ import prisma from "../../../../prisma/db"; // 1. IMPORT PRISMA
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.zoho.com',
-  port: 465,
+  port: 587,
   secure: true,
+  requireTLS: true,
   auth: {
     user: process.env.ZOHO_EMAIL,
     pass: process.env.ZOHO_APP_PASSWORD,
+  },
+  tls: {
+    // enforce TLS v1.2+ and ensure certificate is valid
+    minVersion: 'TLSv1.2',
+    rejectUnauthorized: true,
   },
 });
 
