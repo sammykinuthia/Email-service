@@ -1,73 +1,79 @@
 // app/dashboard/logs/page.tsx
 
 import prisma from "../../../../prisma/db";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { Metadata } from "next";
-import { format } from 'date-fns';
+import LogsTable from "../../_components/LogsTable";
+import { EmailLog, Project } from "@prisma/client";
 
-export const metadata: Metadata = {
-    title: "Mail Service | Email Logs",
-    description: "View the history of emails sent from your projects.",
-};
 
-export default async function LogsPage() {
+export interface EmailLogClient extends EmailLog{
+    project:Project
+}
+
+export default async function LogsPage({ searchParams }: { searchParams: any }) {
     const { userId } = auth();
+    const user = await currentUser();
+    const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+
     if (!userId) redirect("/");
 
+    const isAdmin = user?.primaryEmailAddress?.emailAddress === adminEmail;
+
+    // Extract query params
+    const page = Number(searchParams.page) || 1;
+    const pageSize = 10;
+
+    const search = searchParams.search || "";
+    const status = searchParams.status || "ALL";
+    const project = searchParams.project || "ALL";
+
+    const sort = searchParams.sort || "createdAt";
+    const direction = searchParams.direction === "asc" ? "asc" : "desc";
+
+    // Fetch user projects
     const userProjects = await prisma.project.findMany({
-        where: { userId },
-        select: { id: true },
+        where: isAdmin ? {} : { userId },
     });
 
     const projectIds = userProjects.map(p => p.id);
 
+    // Build WHERE conditions
+    const where: any = {
+        userSecretId: { in: projectIds }
+    };
+
+    if (search) {
+        where.OR = [
+            { subject: { contains: search, mode: "insensitive" } },
+            { to: { contains: search, mode: "insensitive" } },
+            { body: { contains: search, mode: "insensitive" } },
+        ];
+    }
+
+    if (status !== "ALL") where.status = status;
+    if (project !== "ALL") where.project = { name: project };
+
+    // Total Count
+    const totalLogs = await prisma.emailLog.count({ where });
+
+    // Pagination skip/take
     const logs = await prisma.emailLog.findMany({
-        where: {
-            userSecretId: {
-                in: projectIds,
-            },
-        },
-        include: {
-            project: true,
-        },
-        orderBy: {
-            createdAt: 'desc'
-        },
-        take: 50, // Add pagination later
+        where,
+        include: { project: true },
+        orderBy: { [sort]: direction },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
     });
 
     return (
-        <div className="space-y-8">
-            <h1 className="text-3xl font-bold tracking-tight">Email Logs</h1>
-            <div className="bg-white/5 rounded-2xl backdrop-blur-md overflow-hidden">
-                <table className="w-full text-left">
-                    <thead className="bg-white/10">
-                        <tr>
-                            <th className="p-4 font-semibold">To</th>
-                            <th className="p-4 font-semibold">Subject</th>
-                            <th className="p-4 font-semibold">Project</th>
-                            <th className="p-4 font-semibold">Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {logs.map(log => (
-                            <tr key={log.id} className="border-b border-white/10 last:border-0">
-                                <td className="p-4 truncate">{log.to}</td>
-                                <td className="p-4 truncate">{log.subject}</td>
-                                <td className="p-4 truncate text-blue-300">{log.project.name}</td>
-                                <td className="p-4 truncate">{format(log.createdAt, 'MMM d, yyyy HH:mm')}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                 {logs.length === 0 && (
-                    <div className="text-center py-20">
-                        <h2 className="text-xl font-medium">No emails sent yet.</h2>
-                        <p className="text-blue-200 mt-2">Sent emails will appear here.</p>
-                    </div>
-                )}
-            </div>
-        </div>
-    )
+        <LogsTable
+            logs={logs}
+            page={page}
+            total={totalLogs}
+            pageSize={pageSize}
+            searchParams={searchParams}
+            projects={userProjects}
+        />
+    );
 }
