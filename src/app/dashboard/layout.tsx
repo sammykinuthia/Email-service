@@ -1,12 +1,10 @@
 // app/dashboard/layout.tsx
 
-"use client"; // This must be a client component to use state
+"use client";
 
 import React, { useState } from "react";
-// We remove Clerk's server components as this is now a client component
-// Authentication will be handled by Clerk's provider higher up the tree
-import SideNav from "../_components/SideNav";
 import MobileHeader from "../_components/MobileHeader";
+import SideNav from "../_components/SideNav";
 
 export default function DashboardLayout({
   children,
@@ -16,15 +14,18 @@ export default function DashboardLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
+    // Use w-full instead of w-screen and ensure body has overflow-x-hidden
     <div className="min-h-screen w-full bg-gradient-to-br from-blue-950 to-indigo-950 text-white">
-      <div className="flex h-full">
+      <div className="flex">
         <SideNav
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
         />
-        <div className="flex flex-1 flex-col">
+        {/* This div allows the main content to shrink and grow correctly */}
+        <div className="flex min-w-0 flex-1 flex-col">
           <MobileHeader toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-          <main className="flex-1 p-4 sm:p-6 md:p-8">
+          {/* Main content area scrolls independently on overflow */}
+          <main className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8">
             {children}
           </main>
         </div>
