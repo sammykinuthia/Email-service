@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
       emailHtmlContent = data.html;
       emailTextContent = "This email is in HTML format. Please use an HTML-compatible client to view it.";
     } else {
-      const { subject, intro, ...others } = data;
+      const { subject, key, intro, ...others } = data;
        const templateProps: GenericTemplateProps = {
         subject: subject,
         intro: intro as string, // We know intro exists here because of the check above
